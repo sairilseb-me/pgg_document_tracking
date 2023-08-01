@@ -9,7 +9,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -31,10 +31,7 @@
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div class="sidebar-brand-text m-2">Document Tracking System</div>
         </a>
 
         <!-- Divider -->
@@ -47,37 +44,42 @@
                 <span>{{ __('Dashboard') }}</span></a>
         </li>
 
+        <li class="nav-item {{ Nav::isRoute('home') }}">
+            <a class="nav-link" href="/files">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>{{ __('Files') }}</span></a>
+        </li>
+
         <!-- Divider -->
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-        <div class="sidebar-heading">
+        {{-- <div class="sidebar-heading">
             {{ __('Settings') }}
-        </div>
+        </div> --}}
 
         <!-- Nav Item - Profile -->
-        <li class="nav-item {{ Nav::isRoute('profile') }}">
+        {{-- <li class="nav-item {{ Nav::isRoute('profile') }}">
             <a class="nav-link" href="{{ route('profile') }}">
                 <i class="fas fa-fw fa-user"></i>
                 <span>{{ __('Profile') }}</span>
             </a>
-        </li>
+        </li> --}}
 
         <!-- Nav Item - About -->
-        <li class="nav-item {{ Nav::isRoute('about') }}">
+        {{-- <li class="nav-item {{ Nav::isRoute('about') }}">
             <a class="nav-link" href="{{ route('about') }}">
                 <i class="fas fa-fw fa-hands-helping"></i>
                 <span>{{ __('About') }}</span>
             </a>
-        </li>
+        </li> --}}
 
         <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
+        {{-- <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+        </div> --}}
 
     </ul>
     <!-- End of Sidebar -->
@@ -97,7 +99,7 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
@@ -106,7 +108,7 @@
                             </button>
                         </div>
                     </div>
-                </form>
+                </form> --}}
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -277,16 +279,18 @@
                 @yield('main-content')
 
             </div>
+
             <!-- /.container-fluid -->
 
         </div>
         <!-- End of Main Content -->
 
+        @yield('script')
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Alejandro RH {{ now()->year }}</span>
+                    <span>Created By: ICT Guimaras</span>
                 </div>
             </div>
         </footer>
@@ -325,7 +329,6 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
