@@ -39,7 +39,7 @@
                             <td>{{ $file->document_id }}</td>
                             <td>{{ $file->filename }}</td>
                             <td>{{ $file->format }}</td>
-                            <td>Admin</td>
+                            <td>{{ $file->user->username }}</td>
                             <td>{{ $file->created_at }}</td>
                             <td>
                                 <button type="button" class="btn btn-secondary btn-sm">View</button>
