@@ -13,7 +13,7 @@ return new class extends Migration
     {
 
         Schema::create('files', function (Blueprint $table) {
-            $table->string('id');
+            $table->string('document_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('filename');

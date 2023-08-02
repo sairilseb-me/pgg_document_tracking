@@ -15,6 +15,12 @@
                 </div>
             @endforeach
         @endif
+
+        @if(session('success'))
+        <div class="alert alert-success">
+            <p>{{ session('success') }}</p>
+        </div>
+        @endif
         <div class="row">
             <table class="table">
                 <thead>
@@ -27,11 +33,28 @@
                         <th>Option</th>
                     </tr>
                 </thead>
+                <tbody>
+                    @foreach ($files as $file)
+                        <tr>
+                            <td>{{ $file->document_id }}</td>
+                            <td>{{ $file->filename }}</td>
+                            <td>{{ $file->format }}</td>
+                            <td>Admin</td>
+                            <td>{{ $file->created_at }}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary btn-sm">View</button>
+                                <button type="button" class="btn btn-warning btn-sm">Edit</button>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
     </div>
 @endsection
 
+{{-- Upload file modal --}}
 <div class="modal fade" id="upload-file" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <form action="/files" method="POST" enctype="multipart/form-data">
@@ -72,6 +95,9 @@
         
     </div>
 </div>
+{{-- end of Upload file modal --}}
+
+
 
 @section('script')
     <script>

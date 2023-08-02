@@ -11,7 +11,18 @@ class files extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'document_id';
+
+    public $incrementing = false;
+
+    protected $fillable = [
+        'document_id',
+        'user_id',
+        'filename',
+        'format',
+        'description',
+        'file_path'
+    ];
 
     public function user() 
     {

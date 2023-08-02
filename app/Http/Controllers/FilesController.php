@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\files;
+use App\Http\Requests\FileRequest;
+use App\Models\Files;
 use Illuminate\Http\Request;
+
+use function PHPSTORM_META\map;
 
 class FilesController extends Controller
 {
@@ -12,7 +15,8 @@ class FilesController extends Controller
      */
     public function index()
     {
-        return view('files.index');
+        $files = Files::all();
+        return view('files.index')->with('files', $files);
     }
 
     /**
@@ -26,9 +30,36 @@ class FilesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FileRequest $request)
     {
-        return $request->all();
+        
+        $format = '';
+        if($request->file('file')) {
+            $file = $request->file('file');
+            $filename = time().'-'.$file->getClientOriginalName();
+            $path = $file->storeAs('public/files', $filename);
+            $format = $file->getClientOriginalExtension();
+        }
+
+        
+        $date = date('Ymd');
+        $count = Files::where('document_id', 'LIKE', "%$date%")->count();
+        
+        $id = $count == 0 ? 'go'.'-'.$date.'-'.'1' : 'go'.'-'.$date.'-'. $count + 1;
+        
+        $document = Files::create([
+            'document_id' => $id,
+            'user_id' => $request->input('user-id'),
+            'filename' => $request->input('filename'),
+            'format' => $format,
+            'description' => $request->input('description'),
+            'file_path' => $path
+        ]);
+
+
+        if($document) return redirect()->back()->with('success', 'Successfully uploaded a file.');
+        return redirect()->back()->withErrors(['errors' => 'Failed to upload file.']);
+
     }
 
     /**
