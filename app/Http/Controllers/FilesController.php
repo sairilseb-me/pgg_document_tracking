@@ -65,9 +65,11 @@ class FilesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(files $files)
+    public function show($document_id)
     {
-        //
+        $file = Files::where('document_id', '=', $document_id)->firstOrFail();
+
+        return view('files.view')->with('file', $file);
     }
 
     /**
@@ -81,16 +83,33 @@ class FilesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, files $files)
+    public function update(Request $request, $document_id)
     {
-        //
+        $request->validate([
+            'filename' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+        $file = Files::findOrFail($document_id);
+
+        $file->filename = $request->input('filename');
+        $file->description = $request->input('description');
+        $file = $file->update();
+
+        if($file) return redirect()->back()->with('success', 'Successfully updated a document.');
+        return redirect()->back()->withErrors(['errors' => 'Failed to update document.']);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(files $files)
+    public function destroy($document_id)
     {
-        //
+        $file = Files::findOrFail($document_id);
+        $file = $file->delete();
+
+        if($file) return redirect()->back()->with('success', 'Successfully deleted a document.');
+        return redirect()->back()->withErrors(['errors' => 'Failed to delete a document.']);
     }
 }

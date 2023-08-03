@@ -42,9 +42,10 @@
                             <td>{{ $file->user->username }}</td>
                             <td>{{ $file->created_at }}</td>
                             <td>
-                                <button type="button" class="btn btn-secondary btn-sm">View</button>
-                                <button type="button" class="btn btn-warning btn-sm">Edit</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                {{-- <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#download-file" data-file="{{ $file }}">View</button> --}}
+                                <a href="/files/{{ $file->document_id }}" class="btn btn-secondary btn-sm">View</a>
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit-modal" data-file="{{ $file }}">Edit</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-file="{{ $file }}">Delete</button>
                             </td>
                         </tr>
                     @endforeach
@@ -97,7 +98,66 @@
 </div>
 {{-- end of Upload file modal --}}
 
+{{-- Edit Modal --}}
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="/files" method="POST" id="edit-form">
+            @csrf
+            <input type="hidden" name="_method" id="_control" value="PUT">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Edit Document</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="">Filename:</label>
+                        <input type="text" name="filename" id="edit-filename" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Description:</label>
+                        <textarea name="description" id="edit-description" cols="30" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </form>
+      
+    </div>
+  </div>
 
+  {{-- End Edit Modal --}}
+  <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/files" method="POST" id="delete-form">
+            @csrf
+            <input type="hidden" name="_method" id="_delete-control" value="DELETE">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You are about to delete <strong><span id="delete-filename"></span></strong>, continue?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+
+  {{-- Delete Modal --}}
 
 @section('script')
     <script>
@@ -105,6 +165,20 @@
             let filename = event.target.files[0].name
             $('#file-name').text(filename)
         })
+
+        $('#edit-modal').on('show.bs.modal', function(e) {
+            let file = $(e.relatedTarget).data('file')
+            $('#edit-filename').val(file.filename)
+            $('#edit-description').val(file.description)
+            $('#edit-form').attr('action', '/files/' + file.document_id)
+        })
+
+        $('#delete-modal').on('show.bs.modal', function(e) {
+            let file = $(e.relatedTarget).data('file')
+            $('#delete-form').attr('action', '/files/' + file.document_id)
+            $('#delete-filename').html(file.filename)
+        })
+
     </script>
 @endsection
 
