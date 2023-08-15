@@ -19669,6 +19669,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /***/ (function(module, exports, __webpack_require__) {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+window.$ = window.jQuery;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

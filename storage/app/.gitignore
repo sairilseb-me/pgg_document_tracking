@@ -1,4 +1,4 @@
 *
 !public/
 !.gitignore
-laravel/logs.*
+storage/logs
