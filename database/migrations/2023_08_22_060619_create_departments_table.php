@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::create('files', function (Blueprint $table) {
-            $table->string('document_id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('filename');
-            $table->string('format');
-            $table->text('description');
-            $table->string('file_path');
+        Schema::create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('office_name');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('departments');
     }
 };

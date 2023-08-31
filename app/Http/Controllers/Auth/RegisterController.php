@@ -53,6 +53,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role_id' => ['required', 'numeric'],
+            'department_id' => ['required', 'numeric']
         ]);
     }
 
@@ -68,6 +70,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'password' => $data['password'],
+            'role_id' => $data['role_id'],
+            'department_id' => $data['department_id']
         ]);
     }
 }
