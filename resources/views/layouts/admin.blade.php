@@ -43,11 +43,19 @@
                 <span>{{ __('Dashboard') }}</span></a>
         </li>
 
-        <li class="nav-item {{ Nav::isRoute('home') }}">
+        <li class="nav-item {{ Nav::isRoute('files.index') }}">
             <a class="nav-link" href="/files">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>{{ __('Files') }}</span></a>
         </li>
+
+        @if(auth()->user()->isSuperAdmin())
+            <li class="nav-item {{ Nav::isRoute('users.index') }}">
+                <a class="nav-link" href="/users">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('Users') }}</span></a>
+            </li>
+        @endif  
 
         <!-- Divider -->
         <hr class="sidebar-divider">

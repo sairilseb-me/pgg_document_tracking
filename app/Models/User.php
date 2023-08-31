@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -67,5 +68,37 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(Files::class);
+    }
+
+    public function role()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    public function department()
+    {
+        return $this->hasOne(Department::class, 'id', 'department_id');
+    }
+
+    public function isSuperAdmin()
+    {
+        if($this->role_id == 1) return true;
+        
+        return false;
+    }
+
+    public function getUsersWithRoles(): Collection
+    {
+        return $this->with('role')->get();
+    }
+
+    public function getUsersWithDepartments(): Collection
+    {
+        return $this->with('department')->get();
+    }
+
+    public function getUsersWithRoleAndDepartment(): Collection
+    {
+        return $this->with(['role', 'department'])->get();
     }
 }
