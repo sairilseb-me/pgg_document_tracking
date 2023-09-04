@@ -87,6 +87,13 @@ class User extends Authenticatable
         return false;
     }
 
+    public function isAdmin()
+    {
+        if($this->role_id == 2) return true;
+
+        return false;
+    }
+
     public function getUsersWithRoles(): Collection
     {
         return $this->with('role')->get();
