@@ -48,7 +48,7 @@
                                 <td>
                                     <div class="">
                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#control-modal" data-user="{{ $user }}">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-user="{{ $user }}">Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -107,6 +107,36 @@
       </div>
     </div>
 </div>
+
+{{-- End of User Modal --}}
+
+{{-- Delete Modal --}}
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/user" method="POST" id="delete-form">
+            @csrf
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>You are about to delete a User: <strong><span id="delete-username"></span></strong>, continue?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+{{-- End of Delete modal --}}
 
 @section('script')
     <script>
@@ -174,10 +204,18 @@
 
         })
 
+        $('#delete-modal').on('show.bs.modal', function(e){
+            let user = $(e.relatedTarget).data('user')
+            $('#delete-username').text(user.name)
+            $('#delete-form').attr('action', '/users/' + user.id)
+        })
+
         function resetForm($form)
         {
             $form.find('input:text, input:password, textarea, input:file, select').val("")
         }
+
+
         
     </script>
 @endsection
