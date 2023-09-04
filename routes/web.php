@@ -28,10 +28,13 @@ Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('/files', FilesController::class);
+    
     Route::resource('/users', UserController::class);
 });
 
+Route::middleware(['auth', 'isSuperAdminAndAdmin'])->group(function() {
+    Route::resource('/files', FilesController::class);
+});
 
 
 Route::get('/about', function () {

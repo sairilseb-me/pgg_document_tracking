@@ -42,7 +42,6 @@
                             <td>{{ $file->user->username }}</td>
                             <td>{{ $file->created_at }}</td>
                             <td>
-                                {{-- <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#download-file" data-file="{{ $file }}">View</button> --}}
                                 <a href="/files/{{ $file->document_id }}" class="btn btn-secondary btn-sm">View</a>
                                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit-modal" data-file="{{ $file }}">Edit</button>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-file="{{ $file }}">Delete</button>
