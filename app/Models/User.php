@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'password',
+        'name', 'username', 'password', 'role_id', 'department_id'
     ];
 
     /**
@@ -100,5 +100,26 @@ class User extends Authenticatable
     public function getUsersWithRoleAndDepartment(): Collection
     {
         return $this->with(['role', 'department'])->get();
+    }
+
+    public function addNewUser(Array $data)
+    {
+        return $this->create([
+            'name' => $data['name'],
+            'username' => $data['username'],
+            'password' => $data['password'],
+            'role_id' => $data['role'],
+            'department_id' => $data['department']
+        ]);
+    }
+
+    public function updateUser(Array $data)
+    {
+        $this->name = $data['name'];
+        $this->username = $data['username'];
+        $this->role_id = $data['role'];
+        $this->department_id = $data['department'];
+
+        return $this->save();
     }
 }

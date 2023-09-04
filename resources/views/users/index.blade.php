@@ -13,6 +13,21 @@
         </div>
         <div class="row">
             <div class="col-12 mb-3">
+                @if($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger">
+                            <p>{{ $error }}</p>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+            </div>
+            <div class="col-12 mb-3">
                 <table class="table">
                     <thead>
                         <tr>
@@ -32,8 +47,8 @@
                                 <td>{{ $user->department->office_name }}</td>
                                 <td>
                                     <div class="">
-                                        <button type="button" class="btn btn-warning btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#control-modal" data-user="{{ $user }}">Edit</button>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-user="{{ $user }}">Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -67,7 +82,7 @@
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" class="form-control" placeholder="Enter username here...">
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-3 password-div">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Enter password here...">
                 </div>
@@ -93,6 +108,36 @@
     </div>
 </div>
 
+{{-- End of User Modal --}}
+
+{{-- Delete Modal --}}
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/user" method="POST" id="delete-form">
+            @csrf
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>You are about to delete a User: <strong><span id="delete-username"></span></strong>, continue?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+{{-- End of Delete modal --}}
+
 @section('script')
     <script>
 
@@ -101,25 +146,75 @@
 
         $('#add-user-btn').on('click', function(){
             $('#controlModalLabel').text('Add User')
+            resetForm($('#control-modal'))
+            $('.password-div').show()
+            $('#update-input').remove()
         })
 
         $('#control-modal').on('show.bs.modal', function(e){
             $('.role-list').remove()
             $('.department-list').remove()
-
-            if(!$(e.relatedTarget).data('user'))
+            resetForm($('#control-modal'))
+            let user;
+            if($(e.relatedTarget).data('user'))
             {
-                roles.forEach(role => {
-                    let list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                user = $(e.relatedTarget).data('user')
+                $('#name').val(user.name)
+                $('.password-div').hide()
+                $('#username').val(user.username)
+                $('#select-role').text(roles[user.role_id])
+                $('#select-department selected').text(departments[user.department_id])  
+                let updateInput = '<input type="hidden" name="_method" value="PATCH" id="update-input">'
+                $('#user-form').prepend(updateInput)
+                $('#user-form').attr('action', '/users/' + user.id)
+            }
+
+            roles.forEach(role => {
+                    let list = ''
+                    if(typeof user !== 'undefined')
+                    {
+                        if(user.role_id == role.id)
+                        {
+                            list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer" selected>' + role.name + '</option>'
+                        }else {
+                            list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                        }
+                    }else {
+                        list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                    }
                     $('#select-role').append(list)
                 });
 
-                departments.forEach(department => {
-                    let list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
-                    $('#select-department').append(list)
-                })
-            }
+            departments.forEach(department => {
+                let list = ''
+                if(typeof user !== 'undefined')
+                {
+                    if(department.id == user.department_id)
+                    {
+                        list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer" selected>' + department.office_name + '</option>'
+                    } else {
+                        list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
+                    }
+                }else {
+                    list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
+                }
+                
+                $('#select-department').append(list)
+            })
+
         })
+
+        $('#delete-modal').on('show.bs.modal', function(e){
+            let user = $(e.relatedTarget).data('user')
+            $('#delete-username').text(user.name)
+            $('#delete-form').attr('action', '/users/' + user.id)
+        })
+
+        function resetForm($form)
+        {
+            $form.find('input:text, input:password, textarea, input:file, select').val("")
+        }
+
 
         
     </script>
