@@ -33,9 +33,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request, User $user)
     {
-        return $request->all();
+        $user->addNewUser($request->all());
+
+        return redirect()->back()->with('success', 'Successfully created a new User.');
     }
 
     /**
@@ -57,9 +59,24 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(string $id, Request $request)
     {
-        //
+        
+        $request->integer('role');
+        $request->integer('department');
+
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'username' => 'required|string',
+            'role' => 'required|numeric',
+            'department' => 'required|numeric'
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->updateUser($validated);
+
+        return redirect()->back()->with('success', 'Successfully update user data.');
     }
 
     /**

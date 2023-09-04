@@ -47,7 +47,7 @@
                                 <td>{{ $user->department->office_name }}</td>
                                 <td>
                                     <div class="">
-                                        <button type="button" class="btn btn-warning btn-sm">Edit</button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#control-modal" data-user="{{ $user }}">Edit</button>
                                         <button type="button" class="btn btn-danger btn-sm">Delete</button>
                                     </div>
                                 </td>
@@ -82,7 +82,7 @@
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" class="form-control" placeholder="Enter username here...">
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-3 password-div">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Enter password here...">
                 </div>
@@ -116,26 +116,68 @@
 
         $('#add-user-btn').on('click', function(){
             $('#controlModalLabel').text('Add User')
+            resetForm($('#control-modal'))
+            $('.password-div').show()
+            $('#update-input').remove()
         })
 
         $('#control-modal').on('show.bs.modal', function(e){
             $('.role-list').remove()
             $('.department-list').remove()
-
-            if(!$(e.relatedTarget).data('user'))
+            resetForm($('#control-modal'))
+            let user;
+            if($(e.relatedTarget).data('user'))
             {
-                roles.forEach(role => {
-                    let list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                user = $(e.relatedTarget).data('user')
+                $('#name').val(user.name)
+                $('.password-div').hide()
+                $('#username').val(user.username)
+                $('#select-role').text(roles[user.role_id])
+                $('#select-department selected').text(departments[user.department_id])  
+                let updateInput = '<input type="hidden" name="_method" value="PATCH" id="update-input">'
+                $('#user-form').prepend(updateInput)
+                $('#user-form').attr('action', '/users/' + user.id)
+            }
+
+            roles.forEach(role => {
+                    let list = ''
+                    if(typeof user !== 'undefined')
+                    {
+                        if(user.role_id == role.id)
+                        {
+                            list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer" selected>' + role.name + '</option>'
+                        }else {
+                            list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                        }
+                    }else {
+                        list = '<option value="' + role.id + '" class="role-list" style="cursor: pointer">' + role.name + '</option>'
+                    }
                     $('#select-role').append(list)
                 });
 
-                departments.forEach(department => {
-                    let list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
-                    $('#select-department').append(list)
-                })
-            }
+            departments.forEach(department => {
+                let list = ''
+                if(typeof user !== 'undefined')
+                {
+                    if(department.id == user.department_id)
+                    {
+                        list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer" selected>' + department.office_name + '</option>'
+                    } else {
+                        list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
+                    }
+                }else {
+                    list = '<option value="' + department.id + '" class="department-list" style="cursor: pointer">' + department.office_name + '</option>'
+                }
+                
+                $('#select-department').append(list)
+            })
+
         })
 
+        function resetForm($form)
+        {
+            $form.find('input:text, input:password, textarea, input:file, select').val("")
+        }
         
     </script>
 @endsection
