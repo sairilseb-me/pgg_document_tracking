@@ -129,4 +129,9 @@ class User extends Authenticatable
 
         return $this->save();
     }
+
+    public function incoming()
+    {
+        return $this->hasMany(Incoming::class);
+    }
 }

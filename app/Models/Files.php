@@ -28,4 +28,10 @@ class files extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function incoming()
+    {
+        return $this->hasMany(Incoming::class);
+    }
+
 }

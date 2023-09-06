@@ -23,9 +23,7 @@ class isSuperAdminAndAdmin
                 return $next($request);
             }
 
-            return redirect()->route('files.index')->withErrors(['errors' => 'You dont have enough Authorization to access this page.']);
+            return redirect()->back()->withErrors(['errors' => 'You dont have enough Authorization to access this page.']);
         }
-
-        
     }
 }

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FileRequest;
+use App\Models\Department;
 use App\Models\Files;
+use App\Models\Incoming;
+use Exception;
 use Illuminate\Http\Request;
 
 use function PHPSTORM_META\map;
@@ -18,7 +21,8 @@ class FilesController extends Controller
     public function index()
     {
         $files = Files::with('user')->get();
-        return view('files.index')->with('files', $files);
+        $departments = Department::all();
+        return view('files.index')->with(['files' => $files, 'departments' => $departments]);
     }
 
     /**
@@ -34,7 +38,7 @@ class FilesController extends Controller
      */
     public function store(FileRequest $request)
     {
-        
+
         $format = '';
         if($request->file('file')) {
             $file = $request->file('file');
@@ -43,7 +47,7 @@ class FilesController extends Controller
             $format = $file->getClientOriginalExtension();
         }
 
-        
+    
         $date = date('Ymd');
         $count = Files::where('document_id', 'LIKE', "%$date%")->count();
         
@@ -58,9 +62,17 @@ class FilesController extends Controller
             'file_path' => $path
         ]);
 
-
+        foreach($request->departments as $department)
+        {
+            Incoming::create([
+                'department_id' => (int)$department,
+                'file_id' => $id,
+            ]);
+        }
+    
         if($document) return redirect()->back()->with('success', 'Successfully uploaded a file.');
         return redirect()->back()->withErrors(['errors' => 'Failed to upload file.']);
+    
 
     }
 

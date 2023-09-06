@@ -57,7 +57,13 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>{{ __('Users') }}</span></a>
             </li>
-        @endif  
+        @endif 
+
+        <li class="nav-item {{ Nav::isRoute('incoming.index') }}">
+            <a class="nav-link" href="/incoming">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>{{ __('Incoming') }}</span></a>
+        </li>
 
 
         <!-- Divider -->

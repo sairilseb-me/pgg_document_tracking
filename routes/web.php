@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FilesController;
+use App\Http\Controllers\IncomingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,7 @@ Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 Route::middleware('auth')->group(function () {
-    
+    Route::resource('/incoming', IncomingController::class);
     Route::resource('/users', UserController::class);
 });
 

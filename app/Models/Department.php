@@ -21,4 +21,9 @@ class Department extends Model
     {
         return $this->all();
     }
+
+    public function incoming()
+    {
+        return $this->belongsTo(Incoming::class);
+    }
 }

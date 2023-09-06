@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col-12 d-flex justify-content-between">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#upload-file">Upload a File</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" id="add-modal" data-target="#upload-file" data-departments="{{ $departments }}">Upload a File</button>
                 <input type="text" name="" id="" placeholder="Search File...">
             </div>
         </div>
@@ -85,6 +85,9 @@
                         <label for="description">Description</label>
                         <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
                      </div>
+                     <div id="departments-div" class="row d-flex justify-content-between ml-2">
+                        
+                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -163,6 +166,14 @@
         $('#file').on('change', function(e) {
             let filename = event.target.files[0].name
             $('#file-name').text(filename)
+        })
+
+        $('#upload-file').on('show.bs.modal', function(e) {
+            let departments = $(e.relatedTarget).data('departments')
+            departments.forEach(department => {
+                let department_div = '<div class="col-6 form-check department-class mb-1"><input type="checkbox" name="departments[]" class="form-check-input" value="' + department.id + '" id="department-' + department.id + '" style="cursor:pointer"><label="form-check-label" for="department-' + department.id + '">' + department.office_name + '</label></div>'
+                $('#departments-div').append(department_div)
+            });
         })
 
         $('#edit-modal').on('show.bs.modal', function(e) {
