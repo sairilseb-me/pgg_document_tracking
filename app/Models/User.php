@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function files()
     {
-        return $this->hasMany(Files::class);
+        return $this->hasMany(Files::class, 'id', 'user_id');
     }
 
     public function role()
@@ -130,8 +130,4 @@ class User extends Authenticatable
         return $this->save();
     }
 
-    public function incoming()
-    {
-        return $this->hasMany(Incoming::class);
-    }
 }

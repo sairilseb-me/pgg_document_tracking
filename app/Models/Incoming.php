@@ -23,18 +23,14 @@ class Incoming extends Model
      * Relationships
      */
 
-     public function user()
-     {
-        return $this->belongsTo(User::class);
-     }
 
      public function departments()
      {
-        return $this->hasMany(Department::class);
+        return $this->hasMany(Department::class, 'id', 'department_id');
      }
 
-     public function file()
+     public function files()
      {
-        return $this->belongsTo(File::class);
+        return $this->hasMany(Files::class, 'document_id', 'file_id');
      }
 }

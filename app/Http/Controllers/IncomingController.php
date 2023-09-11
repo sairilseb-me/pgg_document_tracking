@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Incoming;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Files;
 
 class IncomingController extends Controller
 {
@@ -12,7 +14,8 @@ class IncomingController extends Controller
      */
     public function index()
     {
-        return view('incoming.index');
+        $incomings = Incoming::with('files.user')->where('department_id', Auth::user()->department_id)->get();     
+        return view('incoming.index')->with('incomings', $incomings);
     }
 
     /**
