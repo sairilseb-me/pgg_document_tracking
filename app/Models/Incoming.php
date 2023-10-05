@@ -33,4 +33,9 @@ class Incoming extends Model
      {
         return $this->hasMany(Files::class, 'document_id', 'file_id');
      }
+
+     public function reroutes()
+     {
+      return $this->hasMany(Reroute::class, 'incoming_id', 'id');
+     }
 }

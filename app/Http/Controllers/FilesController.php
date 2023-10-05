@@ -82,7 +82,6 @@ class FilesController extends Controller
     public function show($document_id)
     {
         $file = Files::where('document_id', '=', $document_id)->firstOrFail();
-
         return view('files.view')->with('file', $file);
     }
 

@@ -9,8 +9,11 @@
                 <p><strong>Upload at:</strong> {{ $file->created_at }}</p>
             </div>
             <div class="col-12">
-                <p>{{ $file->file_path }}</p>
-                <iframe src="{{ asset('/storage/files/1691061501-Cyril Seberiaga CV - 12.23.2022.pdf') }}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
+                @php
+                    $newFilePathArray = explode('/', $file->file_path);
+                    $newFilePath = '/storage/files/'.end($newFilePathArray)
+                @endphp
+                {{-- <iframe src="{{ asset($newFilePath) }}" frameborder="0" style="width:100%;min-height:640px;"></iframe> --}}
             </div>
         </div>
     </div>

@@ -65,6 +65,14 @@
                 <span>{{ __('Incoming') }}</span></a>
         </li>
 
+        @if (auth()->user()->isAdmin() || auth()->user()->isSuperAdmin())
+            <li class="nav-item {{ Nav::isRoute('reroutes.index') }}">
+                <a class="nav-link" href="/reroutes">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('Re-Routes') }}</span></a>
+            </li>
+        @endif
+
 
         <!-- Divider -->
         <hr class="sidebar-divider">

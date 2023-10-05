@@ -31,7 +31,7 @@ class Files extends Model
 
     public function incoming()
     {
-        return $this->belongsTo(Incoming::class, 'file_id', 'document_id');
+        return $this->belongsTo(Incoming::class, 'document_id', 'file_id');
     }
 
 }

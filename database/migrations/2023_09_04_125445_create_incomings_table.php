@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('file_id');
             $table->foreign('file_id')->references('document_id')->on('files');
             $table->unsignedBigInteger('received_by')->nullable();
+            $table->dateTime('received_date')->nullable();
             $table->integer('status')->default(0);
+            $table->text('comments')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
